@@ -1,0 +1,70 @@
+# User and worker process settings
+#user www-data;
+#worker_processes auto;
+#pid /run/nginx.pid;
+
+# Error and process files
+#error_log /var/log/nginx/error.log;
+#pid /var/run/nginx.pid;
+
+# Worker connections and multi_accept
+events {
+    worker_connections 1024;
+    multi_accept on;
+}
+
+http {
+    # Basic settings
+    #sendfile on;
+    #tcp_nopush on;
+    #tcp_nodelay on;
+    #keepalive_timeout 65;
+    #types_hash_max_size 2048;
+
+    # MIME types
+    #include /etc/nginx/mime.types;
+    #default_type application/octet-stream;
+
+    # Logging settings
+    #access_log /var/log/nginx/access.log;
+    #error_log /var/log/nginx/error.log;
+
+    # Gzip Settings
+   # gzip on;
+   # gzip_disable "msie6";
+
+    # Include server block configurations
+  #  include /etc/nginx/conf.d/*.conf;
+ #   include /etc/nginx/sites-enabled/*;
+server {
+    # SSL/TLS Configuration
+    listen 443 ssl;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_certificate /etc/nginx/ssl/Nginx.crt;
+    ssl_certificate_key /etc/nginx/ssl/Nginx.key;
+
+    # Root, Index, and Server Name
+    root /var/www/html;
+    server_name raitmous.42.fr localhost;
+    index index.php index.html index.htm;
+
+    # Handling 404 Errors
+    location / {
+        try_files $uri $uri/ = 400;
+    }
+
+    # PHP Processing
+   # location ~ \.php$ {
+    #    include snippets/fastcgi-php.conf;
+     #   fastcgi_pass wordpress:9000; # Ensure this matches the PHP processor service
+    #}
+    location ~ \.php$ {
+    include snippets/fastcgi-php.conf;
+    fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+    # ... other FastCGI parameters
+}
+
+    # Additional Configurations as needed...
+	}
+}
+

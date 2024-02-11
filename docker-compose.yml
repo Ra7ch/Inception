@@ -1,0 +1,208 @@
+# # version: '3'
+
+# # services:
+# #     nginx:
+# #         build:
+# #             context: .
+# #             dockerfile: nginx/Dockerfile
+# #         container_name: nginx
+# #         depends_on:
+# #             - mariadb
+# #         ports:
+# #             - "443:443"
+# #         volumes:
+# #             - ./nginx/conf/:/etc/nginx/http.d/
+# #             #- ./nginx/tools:/etc/nginx/ssl/
+# #             #- /home/${USER}/simple_docker_nginx_html/public/html:/var/www/
+# #         restart: always
+
+# #     mariadb:
+# #         build:
+# #             context: .
+# #             dockerfile: MariaDB/Dockerfile
+# #         container_name: mariadb
+# #         ports:
+# #             - "3306:3306"
+# #         volumes:
+# #             - db-volume:/var/lib/mysql
+# #         restart: always
+    
+# #     wordpress:
+# #         build:
+# #             context: .
+# #             dockerfile: wordpress/Dockerfile
+# #             args:
+# #                 DB_NAME: ${DB_NAME}
+# #                 DB_USER: ${DB_USER}
+# #                 DB_PASS: ${DB_PASS}
+# #         container_name: wordpress
+# #         depends_on:
+# #             - mariadb
+# #         restart: always
+# #         networks:
+# #             - inception
+# #         volumes:
+# #             - wp-volume:/var/www/
+
+# # volumes:
+# #     wp-volume:
+# #         driver_opts:
+# #             o: bind
+# #             type: none
+# #             device: /home/${USER}/data/wordpress
+
+# #     db-volume:
+# #         driver_opts:
+# #             o: bind
+# #             type: none
+# #             device: /home/${USER}/data/mariadb
+# # networks:
+# #     inception:
+# #             driver: bridge
+
+# version: '3'
+
+# services:
+#   nginx:
+#     build:
+#         context: .
+#         dockerfile: nginx/Dockerfile
+#     container_name: nginx
+#     depends_on:
+#         - wordpress
+#     ports:
+#         - "443:443"
+#     networks:
+#         - inception
+#     volumes:
+#         - ./nginx/conf/:/etc/nginx/http.d/
+#         # - ./nginx/tools:/etc/nginx/ssl/
+#         - wp-volume:/var/www/
+#     restart: always
+
+#   mariadb:
+#     build:
+#       context: .
+#       dockerfile: MariaDB/Dockerfile
+#       args:
+#         DB_NAME: ${DB_NAME}
+#         DB_USER: ${DB_USER}
+#         DB_PASS: ${DB_PASS}
+#         DB_ROOT: ${DB_ROOT}
+#     container_name: mariadb
+#     ports:
+#       - "3306:3306"
+#     networks:
+#       - inception
+#     volumes:
+#       - db-volume:/var/lib/mysql
+#     restart: always
+
+#   wordpress:
+#     build:
+#       context: .
+#       dockerfile: wordpress/Dockerfile
+#       args:
+#         DB_NAME: ${DB_NAME}
+#         DB_USER: ${DB_USER}
+#         DB_PASS: ${DB_PASS}
+#     container_name: wordpress
+#     depends_on:
+#       - mariadb
+#     restart: always
+#     networks:
+#       - inception
+#     volumes:
+#       - wp-volume:/var/www/
+
+# volumes:
+#   wp-volume:
+#     driver_opts:
+#       o: bind
+#       type: none
+#       device: /home/${USER}/data/wordpress
+
+#   db-volume:
+#     driver_opts:
+#       o: bind
+#       type: none
+#       device: /home/${USER}/data/mariadb
+
+# networks:
+#     inception:
+#         driver: bridge
+
+
+
+version: '3'
+
+services:
+  mariadb:
+    container_name: mariadb
+    build:
+      context: ./mariadb/
+    # ports:
+    #   - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - database:/var/lib/mysql
+    networks:
+      - mynetwork
+    env_file:
+      - ./.env
+    restart: always
+
+  wordpress:
+    container_name: wordpress
+    build:
+       context: ./wordpress/  # Change to the actual path
+    depends_on:
+      - mariadb
+    expose:
+      - "9000"
+    # ports:
+    #   - "9000:9000"
+    volumes:
+      - wordpress-data2:/var/www/html
+    networks:
+      - mynetwork
+    env_file:
+      - ./.env
+    restart: always
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx/ # Change to the actual path
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"  # Map port 8080 on the host to port 80 in the container
+    volumes:
+      - wordpress-data2:/var/www/html
+    networks:
+      - mynetwork
+    env_file:
+      - ./.env
+    restart: always
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  wordpress-data2:
+    name: wordpress-data2
+    driver: local
+    driver_opts:
+            device: /home/rach/Desktop/DockerTest/worddata2
+            o: bind
+            type: none
+  database:
+    name: database
+    driver: local
+    driver_opts:
+      device: /home/rach/Desktop/DovackerTest/database2
+      o: bind
+      type: none
