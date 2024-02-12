@@ -1,8 +1,9 @@
 UP		= docker compose up
-DOWN	= docker compose down
+DOWN	= docker compose down -t 4
 BUILD	= docker compose build
-STOP	= docker compose stop
+STOP	= docker compose stop -t 4
 START	= docker compose start
+RESTART	= docker compose restart -t 4
 SYSINFO	= docker system df
 WORKDIR	= cd srcs
 INFO	= @echo "Running Containers:" && docker ps && echo "Images:" && docker images && echo "Volumes:" && docker volume ls && echo "Networks:" && docker network ls
@@ -21,6 +22,9 @@ build :
 
 start :
 	${WORKDIR} && ${START}
+
+restart :
+	${WORKDIR} && ${RESTART}
 
 stop :
 	${WORKDIR} && ${STOP}
@@ -47,6 +51,8 @@ rm_vol:
 	sudo chown -R $(USER) $(HOME)/data
 	sudo chmod -R 777 $(HOME)/data
 	rm -rf $(HOME)/data
+	docker volume rm -f database
+	docker volume rm -f wordpress
 
 clean: down
 	docker container prune -f
@@ -54,8 +60,9 @@ clean: down
 
 fclean : down rm_vol clean
 	docker volume prune -f
-	docker volume rm -f $(docker volume ls -q)
-	docker network rm $(docker network ls -q)
+	docker volume rm -f database
+	docker volume rm -f wordpress
+	docker network rm mynetwork
 
 logs:
 	${WORKDIR} && docker compose logs mariadb wordpress nginx
