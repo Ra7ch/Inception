@@ -7,7 +7,7 @@ RESTART	= docker compose restart -t 4
 SYSINFO	= docker system df
 WORKDIR	= cd srcs
 INFO	= @echo "Running Containers:" && docker ps && echo "Images:" && docker images && echo "Volumes:" && docker volume ls && echo "Networks:" && docker network ls
-
+ 
 all :
 	${WORKDIR} && ${BUILD} && ${UP} -d
 
