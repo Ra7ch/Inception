@@ -5,7 +5,7 @@ networks:
     driver: bridge
 
 volumes:
-  wordpress-data: 
+  wordpress-data:
     name: wordpress-data
     driver: local
     driver_opts:
