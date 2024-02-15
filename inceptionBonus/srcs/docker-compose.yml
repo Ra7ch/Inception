@@ -94,7 +94,7 @@ services:
     depends_on:
       - wordpress
     volumes:
-      - wordpress-data:/var/www/html
+      - wordpress-data:/var/www/html 
     env_file:
       - .env
     ports:
