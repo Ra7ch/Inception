@@ -18,4 +18,4 @@ COPY ./tools/redis.sh /tmp/redis.sh
 # RUN find /var/www/html -type d -exec chmod 755 {} \;
 # RUN find /var/www/html -type f -exec chmod 644 {} \;
 
-CMD ["sh", "/tmp/redis.sh"]
+CMD ["sh", "/tmp/redis.sh"] 
