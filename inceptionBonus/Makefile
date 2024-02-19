@@ -1,7 +1,7 @@
 UP		= docker compose up
 DOWN	= docker compose down -t 4
 BUILD	= docker compose build
-STOP	= docker compose stop -t 4 
+STOP	= docker compose stop -t 4
 START	= docker compose start
 RESTART	= docker compose restart -t 4
 SYSINFO	= docker system df
