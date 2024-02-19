@@ -95,7 +95,7 @@ services:
       - wordpress
     volumes:
       - wordpress-data:/var/www/html 
-    env_file: 
+    env_file:
       - .env
     ports:
       - "21:21"
