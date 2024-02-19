@@ -5,7 +5,7 @@ RUN     apt update -y && apt upgrade -y && apt install redis-server -y
 
 COPY ./tools/redis.sh /tmp/redis.sh
 
-# RUN echo "maxmemory 128MB" >> /etc/redis/redis.conf
+# RUN echo "maxmemory 128MB" >> /etc/redis/redis.conf 
 
 # RUN echo "maxmemory-policy allkeys-lfu" >> /etc/redis/redis.conf
 
