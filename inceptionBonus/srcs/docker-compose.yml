@@ -109,15 +109,32 @@ services:
     container_name: adminer
     build: ./requirement/bonus/adminer/.
     image: adminer
+    ports:
+      - "800:800"
     depends_on:
       - mariadb
-    volumes:
-      - wordpress-data:/var/www/html
+    # volumes:
+    #   - wordpress-data:/var/www/html
     networks:
       - mynetwork
     restart: always
+
+##################3
+  static_page:
+    container_name: static_page
+    build:
+       context: ./requirement/bonus/static_page/  # Change to the actual path
+    # expose:
+    #   - "8000"
+    ports:
+      - "8000:8000"
+    networks:
+      - mynetwork
+    env_file:
+      - ./.env
+    restart: always
   # adminer:
-  #   image: dockette/adminer:full-php5 
+  #   image: dockette/adminer:full-php5
   #   restart: always
   #   volumes:
   #     - wordpress-data:/var/www/html
