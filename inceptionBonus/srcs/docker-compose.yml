@@ -94,7 +94,7 @@ services:
     depends_on:
       - wordpress
     volumes:
-      - wordpress-data:/var/www/html 
+      - wordpress-data:/var/www/html
     env_file:
       - .env
     ports:
@@ -104,6 +104,27 @@ services:
     networks:
       - mynetwork
     restart: always
+#################
+  adminer:
+    container_name: adminer
+    build: ./requirement/bonus/adminer/.
+    image: adminer
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress-data:/var/www/html
+    networks:
+      - mynetwork
+    restart: always
+  # adminer:
+  #   image: dockette/adminer:full-php5
+  #   restart: always
+  #   volumes:
+  #     - wordpress-data:/var/www/html
+  #   networks:
+  #     - mynetwork
+  #   ports:
+  #       - 8080:8080
 
   # ftp-server:
   #   container_name: ftp-server
