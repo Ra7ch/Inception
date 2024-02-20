@@ -117,7 +117,7 @@ services:
       - mynetwork
     restart: always
   # adminer:
-  #   image: dockette/adminer:full-php5
+  #   image: dockette/adminer:full-php5 
   #   restart: always
   #   volumes:
   #     - wordpress-data:/var/www/html
