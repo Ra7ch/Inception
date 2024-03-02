@@ -19,7 +19,7 @@ down :
 	@${WORKDIR} && ${DOWN}
 
 build :
-	@${WORKDIR} && ${BUILD} 
+	@${WORKDIR} && ${BUILD}
 
 start :
 	@${WORKDIR} && ${START}
